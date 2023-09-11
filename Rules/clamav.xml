@@ -1,0 +1,68 @@
+<group name="local,syslog,clamav_dec,clamav_dec_results,clamav_dec_found,">
+
+<rule id="100330" level="12">
+    <decoded_as>clamav_dec</decoded_as>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine</description>
+    <description>$(full_log)</description>
+  <location>/var/lib/clamav/logs/FileBrowserShare_Recent.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100331" level="12">
+    <decoded_as>clamav_dec</decoded_as>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine</description>
+  <location>/var/lib/clamav/logs/GeneralShare_Recent.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100332" level="12">
+    <decoded_as>clamav_dec</decoded_as>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine</description>
+  <location>/var/log/clamav/clamav_scan.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100333" level="12">
+    <decoded_as>clamav_dec</decoded_as>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine</description>
+  <location>/var/lib/clamav/logs/FileBrowserShare_Recent.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100334" level="12">
+    <decoded_as>clamav_dec</decoded_as>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine</description>
+  <location>/var/lib/clamav/logs/GeneralShare_Recent.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100335" level="12">
+    <if_sid>100330</if_sid>
+    <decoded_as>clamav_dec_results</decoded_as>
+    <description>ClamAV: Scan Summary</description>
+    <description>$(known_viruses)</description>
+    <description>$(engine_version)</description>
+    <description>$(scanned_directories)</description>
+    <description>$(scanned_files)</description>
+    <description>$(infected_files)</description>
+    <description>$(data_scanned)</description>
+    <description>$(data_read)</description>
+    <description>$(time)</description>
+    <description>$(start_date)</description>
+    <description>$(end_date)</description>
+  <location>/var/lib/clamav/logs/FileBrowserShare_Recent.log</location>
+  <group>clamd, virus,</group>
+</rule>
+
+<rule id="100336" level="12">
+    <if_sid>52502</if_sid>
+    <description>ClamAV: Possible Malware Found and Moved to Quarantine from Remote Scan</description>
+    <group>clamd, virus,</group>
+</rule>
+
+<rule id="100337" level="12">
+    <decoded_as>clamav_dec_scan</decoded_as>
+    <description>ClamAV: Possible Malware $(found) Moved to Quarantine</description>
+    <group>clamd, virus,</group>
+</rule>
+</group>
