@@ -14,7 +14,7 @@
   <rule id="100622" level="12">
     <field name="misp.type">ip-src</field>
     <description>MISP - IoC found in Threat Intel - Category: $(misp.category), Attribute: $(misp.value), Event ID: $(misp.event_id). </description>
-    <description>IP will be blocked via Active-Response. Whitelist if false/positive.</description>
+    <description>IP-SRC will be blocked via Active-Response. Whitelist if false/positive.</description>
     <group>misp_alert,pci_dss_10.6.3,</group>
     <mitre>
         <id>T1071</id>
@@ -23,7 +23,7 @@
   <rule id="100623" level="12">
     <field name="misp.type">ip-dst</field>
     <description>MISP - IoC found in Threat Intel - Category: $(misp.category), Attribute: $(misp.value), Event ID: $(misp.event_id). </description>
-    <description>IP will be blocked via Active-Response. Whitelist if false/positive.</description>
+    <description>IP-DST will be blocked via Active-Response. Whitelist if false/positive.</description>
     <group>misp_alert,pci_dss_10.6.3,</group>
     <mitre>
         <id>T1071</id>
