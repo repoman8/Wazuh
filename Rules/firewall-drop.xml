@@ -1,0 +1,11 @@
+<group name="local,syslog,sshd,">
+
+<!-- Rule is based on active response firewall-drop -->
+<rule id="100225" level="12">
+    <if_sid>650</if_sid>
+    <field name="parameters.program">firewall-drop</field>
+    <field name="command">add</field>
+    <description>$(srcip) blocked by firewall-drop via Active Response</description>
+    <group>active_response,pci_dss_11.4,gpg13_4.13,gdpr_IV_35.7.d,nist_800_53_SI.4,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,tsc_CC7.4,misp,crowdsec,cloudflare,opencti,</group>
+</rule>
+</group>
