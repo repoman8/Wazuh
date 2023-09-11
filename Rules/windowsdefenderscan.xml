@@ -1,0 +1,15 @@
+<group name="local,syslog,windows,windows-defender-scan_dec,windows-defender-scan-result_dec,">
+
+<!-- Rule is based on the active response script windowsdefenderscan.ps1 -->
+    <rule id="100228" level="12">
+        <decoded_as>windows-defender-scan_dec</decoded_as>
+        <description>$(data) triggered Windows Defender Quick Scan via Active Response</description>
+        <group>active_response,pci_dss_11.4,gpg13_4.13,gdpr_IV_35.7.d,nist_800_53_SI.4,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,tsc_CC7.4,misp,opencti,virus,</group>
+    </rule>
+    
+    <rule id="100229" level="12">
+        <decoded_as>windows-defender-scan-result_dec</decoded_as>
+        <description>Windows Defender: Threat Detection Results</description>
+        <group>active_response,pci_dss_11.4,gpg13_4.13,gdpr_IV_35.7.d,nist_800_53_SI.4,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,tsc_CC7.4,misp,opencti,virus,</group>
+    </rule>
+</group>
