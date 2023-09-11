@@ -1,0 +1,31 @@
+<group name="virustotal,custom-virustotal-misp-syscheck,">
+    <rule id="100950" level="0">
+        <decoded_as>json</decoded_as>
+        <field name="integration">custom-virustotal-misp-syscheck</field>
+        <match>custom-virustotal-misp-syscheck</match>
+        <description>VirusTotal integration messages.</description>
+    </rule>
+    
+    <rule id="100951" level="10">
+        <if_sid>100950</if_sid>
+        <field name="virustotal.found">0</field>
+        <description>VirusTotal: Alert - No records in VirusTotal database</description>
+    </rule>
+    
+    <rule id="100952" level="10">
+        <if_sid>100950</if_sid>
+        <field name="virustotal.found">1</field>
+        <field name="virustotal.malicious">0</field>
+        <description>VirusTotal: Alert - $(virustotal.source.file) - No positives found</description>
+    </rule>
+    
+    <rule id="100953" level="12">
+        <if_sid>100950</if_sid>
+        <field name="virustotal.malicious">1</field>
+        <description>VirusTotal: Alert - $(virustotal.source.file) - $(virustotal.positives) engines detected this file</description>
+        <group>pci_dss_10.6.1,pci_dss_11.4,gdpr_IV_35.7.d,</group>
+        <mitre>
+            <id>T1203</id>
+        </mitre>
+    </rule>
+</group>
