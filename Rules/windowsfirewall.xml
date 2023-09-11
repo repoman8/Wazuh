@@ -1,0 +1,9 @@
+<group name="local,syslog,windows,windows-firewall-block_dec,">
+
+<!-- Rule is based on the active response script windowsfirewall.ps1 -->
+    <rule id="100227" level="12">
+    <decoded_as>windows-firewall-block_dec</decoded_as>
+    <description>$(data) blocked by windowsfirewall via Active Response</description>
+    <group>active_response,pci_dss_11.4,gpg13_4.13,gdpr_IV_35.7.d,nist_800_53_SI.4,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,tsc_CC7.4,misp,opencti,</group>
+    </rule>
+</group>
