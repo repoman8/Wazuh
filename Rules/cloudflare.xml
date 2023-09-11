@@ -1,0 +1,13 @@
+<group name="local,syslog,cloudflare,cloudflare-ban_dec,">
+
+<!-- Rule is based on the active response script Cloudflare-Ban -->
+<rule id="100530" level="12">
+    <decoded_as>cloudflare-ban-ip4_dec</decoded_as>
+    <description>Cloudflare: Banning $(srcip) on Edge Network via Active Response</description>
+    <group>active_response,cloudflare,</group>
+    <mitre>
+        <id>T1133</id>
+        <id>T1190</id>
+    </mitre>
+</rule>
+</group>
