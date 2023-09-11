@@ -1,0 +1,7 @@
+<group name="syslog,access_control,">
+  <rule id="25021" level="12">
+    <match>fail2ban.actions</match>
+    <description>Fail2ban action taken</description>
+    <group>authentication_failed,</group>
+  </rule>
+</group>
