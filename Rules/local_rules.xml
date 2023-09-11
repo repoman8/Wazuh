@@ -1,0 +1,224 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015-2020, Wazuh Inc. -->
+
+<group name="local,syslog,sshd,">
+  <rule id="100001" level="10">
+    <if_sid>5716</if_sid>
+        <match type="pcre2">\b(?!(10)|192\.168|172\.(2[0-9]|1[6-9]|3[0-1])|(25[6-9]|2[6-9][0-9]|[3-9][0-9][0-9]|99[1-9]))[0-9]{1,3}\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)</match>
+    <description>sshd: Authentication failed from a public IP address $(srcip).</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+</group>
+
+<group name="local,syslog,sshd,connection_attempt,">
+  <rule id="100002" level="10">
+    <if_sid>5716</if_sid>
+    <match type="pcre2">\b(?!(10)|192\.168|172\.(2[0-9]|1[6-9]|3[0-1])|(25[6-9]|2[6-9][0-9]|[3-9][0-9][0-9]|99[1-9]))[0-9]{1,3}\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)</match>
+    <description>Connection attempted from a public IP address $(srcip).</description>
+    <group>connection_attempt,syslog,sysmon,authentication_failed,</group>
+  </rule>
+</group>
+
+<!-- Syscheck Rules -->
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100200" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/root</field>
+        <description>File modified in /root directory.</description>
+    </rule>
+        <rule id="100201" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/root</field>
+        <description>File added to /root directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100202" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/boot</field>
+        <description>File modified in /boot directory.</description>
+    </rule>
+        <rule id="100203" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/boot</field>
+        <description>File added to /boot directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100204" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/bin</field>
+        <description>File modified in /bin directory.</description>
+    </rule>
+        <rule id="100205" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/bin</field>
+        <description>File added to /bin directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100206" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/sbin</field>
+        <description>File modified in /sbin directory.</description>
+    </rule>
+        <rule id="100207" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/sbin</field>
+        <description>File added to /sbin directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100208" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/usr/bin</field>
+        <description>File modified in /usr/bin directory.</description>
+    </rule>
+        <rule id="100209" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/usr/bin</field>
+        <description>File added to /usr/bin directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100210" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/usr/sbin</field>
+        <description>File modified in /usr/sbin directory.</description>
+    </rule>
+        <rule id="100211" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/usr/sbin</field>
+        <description>File added to /usr/sbin directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100212" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/etc</field>
+        <description>File modified in /etc directory.</description>
+    </rule>
+        <rule id="100213" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/etc</field>
+        <description>File added to /etc directory.</description>
+    </rule>
+</group>
+
+<group name="syscheck,pci_dss_11.5,nist_800_53_SI.7,">
+    <rule id="100214" level="7">
+        <if_sid>550</if_sid>
+        <field name="file">/home</field>
+        <description>File modified in /home directory.</description>
+    </rule>
+        <rule id="100215" level="7">
+        <if_sid>554</if_sid>
+        <field name="file">/home</field>
+        <description>File added to /home directory.</description>
+    </rule>
+</group>
+
+<!-- VirusTotal Rules -->
+<group name="virustotal,">
+  <rule id="100092" level="12">
+    <if_sid>657</if_sid>
+    <match>Successfully removed threat</match>
+    <description>$(parameters.program) removed threat located at $(parameters.alert.data.virustotal.source.file)</description>
+  </rule>
+
+  <rule id="100093" level="12">
+    <if_sid>657</if_sid>
+    <match>Error removing threat</match>
+    <description>Error removing threat located at $(parameters.alert.data.virustotal.source.file)</description>
+  </rule>
+</group>
+
+<!-- Fail2ban Rules -->
+<group name="local,syslog,sshd,fail2ban_dec,fail2ban_dec_ip,">
+<rule id="100220" level="12">
+  <regex> Ban \d+.\d+.\d+.\d+</regex>
+    <description>IP $(srcip) Banned by Fail2ban, </description>
+  <description>authentication failed more than 3 times. </description>
+  <group>authentication_failed,</group>
+      <mitre>
+        <id>T1110</id>
+    </mitre>
+</rule>
+
+<rule id="100221" level="12">
+  <regex> Unban \d+.\d+.\d+.\d+</regex>
+    <description>IP $(srcip) Banned by Fail2ban, </description>
+        <location>/var/log/fail2ban/fail2ban.log</location>
+  <description>unbanned IP $(srcip). </description>
+  <group>authentication_failed,</group>
+</rule>
+
+
+<rule id="100230" level="12">
+      <location>/var/log/fail2ban/fail2ban.log</location>
+  <regex> Ban \d+.\d+.\d+.\d+</regex>      
+    <description>IP $(srcip) Banned by Fail2ban, </description>
+  <description>authentication failed more than 3 times. </description>
+  <group>authentication_failed,</group>
+    <mitre>
+        <id>T1110</id>
+    </mitre>
+</rule>
+
+
+<rule id="100231" level="12">
+  <regex> Unban \d+.\d+.\d+.\d+</regex>
+  <decoded_as>fail2ban_dec_ip</decoded_as>
+    <description>IP $(srcip) Banned by Fail2ban, </description>
+  <description>unbanned IP $(srcip)</description>
+  <group>authentication_failed,</group>
+</rule>
+
+<rule id="100232" level="12">
+  <regex> Unban \d+.\d+.\d+.\d+</regex>
+  <decoded_as>fail2ban_dec_ip</decoded_as>
+    <description>IP $(srcip) Banned by Fail2ban, </description>
+  <description>unbanned IP $(srcip)</description>
+  <group>authentication_failed,</group>
+</rule>
+</group>
+
+<!-- Traefik Rules -->
+<group name="web,accesslog,">
+<rule id="100430" level="10">
+  <if_sid>31100</if_sid>
+  <decoded_as>web-accesslog</decoded_as>
+  <description>Traefik: Network Connection Established with Client $(srcip)</description>
+  <group>traefik</group>
+    <mitre>
+        <id>T1133</id>
+        <id>T1190</id>
+    </mitre>
+</rule>
+</group>
+
+<!-- AbuseIPDB Rules -->
+<group name="local,syslog,sshd,misp,">
+    <rule id="100700" level="14">
+        <field name="abuseipdb.source.rule" type="pcre2">^100622$</field>
+        <field name="abuseipdb.abuse_confidence_score" type="pcre2" negate="yes">^0$</field>
+        <description>AbuseIPDB: Alerted MISP IoC $(srcip) has a $(abuseipdb.abuse_confidence_score)% confidence of abuse.</description>
+        <group>misp_alert,pci_dss_10.6.3,</group>
+    </rule>
+</group>
+
+<!-- Suppress Critical Vulenerability Alerts -->
+<group name="suppress,">
+<rule id="100900" level="0">
+    <if_sid>23506</if_sid>
+    <description>Rule suppression for Critical Vulnerability Alerts</description>
+</rule>
+</group>
