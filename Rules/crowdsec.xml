@@ -1,0 +1,13 @@
+<group name="local,syslog,crowdsec,crowdsec-ban-ip4_dec,">
+
+<!-- Rule is based on the active response script CrowdSec-Ban -->
+<rule id="100630" level="12">
+    <decoded_as>crowdsec-ban-ip4_dec</decoded_as>
+    <description>Crowdsec: Banning $(srcip) on Traefik Network via Active Response</description>
+    <group>active_response,crowdsec,</group>
+    <mitre>
+        <id>T1133</id>
+        <id>T1190</id>
+    </mitre>
+</rule>
+</group>
