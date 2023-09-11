@@ -1,0 +1,172 @@
+<!-- Local Decoders -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015-2020, Wazuh Inc. -->
+
+<!--
+  - Allowed static fields:
+  - location   - where the log came from (only on FTS)
+  - srcuser    - extracts the source username
+  - dstuser    - extracts the destination (target) username
+  - user       - an alias to dstuser (only one of the two can be used)
+  - srcip      - source ip
+  - dstip      - dst ip
+  - srcport    - source port
+  - dstport    - destination port
+  - protocol   - protocol
+  - id         - event id
+  - url        - url of the event
+  - action     - event action (deny, drop, accept, etc)
+  - status     - event status (success, failure, etc)
+  - extra_data - Any extra data
+-->
+
+<decoder name="local_decoder_example">
+    <program_name>local_decoder_example</program_name>
+</decoder>
+
+<decoder name="ar_log_fields">
+    <parent>ar_log</parent>
+    <regex offset="after_parent">^(\S+) Removed positive threat located in (\S+)</regex>
+    <order>script_name, path</order>
+</decoder>
+
+<!-- Crowdsec Ban IPv4 -->
+<!-- For Active Response -->
+<decoder name="crowdsec-ban-ip4_dec">
+    <prematch>^\d+,cscli,</prematch>
+    <regex>Ip:(\d+.\d+.\d+.\d+)</regex>
+    <order>srcip</order>
+</decoder>
+
+<!-- Cloudflare Ban IPv4 -->
+<!-- For Active Response -->
+<decoder name="cloudflare-ban-ip4_dec">
+    <prematch>^Cloudflare-Ban.sh,</prematch>
+    <regex>Ip:(\d+.\d+.\d+.\d+)</regex>
+    <order>srcip</order>
+</decoder>
+
+<!-- Windows Domain Block -->
+<!-- For Active Response -->
+<decoder name="windows-domain-block_dec">
+    <prematch>^\S+ added to blocklist via Windows Host file</prematch>
+    <regex>^"(\S+)|Windows Host file</regex>
+    <order>data</order>
+</decoder>
+
+<!-- Windows Firewall -->
+<!-- For Active Response -->
+<decoder name="windows-firewall-block_dec">
+    <prematch>^\S+ added to blocklist via Windows Firewall</prematch>
+    <regex>^"(\S+)|Windows Firewall</regex>
+    <order>data</order>
+</decoder>
+
+<!-- Windows Defender -->
+<!-- For Active Response -->
+<decoder name="windows-defender-scan_dec">
+    <prematch>^\S+ triggered Windows Defender Scan</prematch>
+    <regex>^"(\S+)|Windows Defender</regex>
+    <order>data</order>
+</decoder>
+
+<!-- Windows Defender Scan/Threat Detection Result -->
+<decoder name="windows-defender-scan-result_dec">
+    <prematch>ThreatStatusID</prematch>
+    <regex>ThreatStatusID|(?s).*</regex>
+    <order>data</order>
+</decoder>
+
+<!-- Fail2ban -->
+<decoder name="fail2ban_dec">
+   <prematch>[\d+]: NOTICE\s+[\S+]|[\d+]: INFO\s+[\S+]|[\d+]: WARNING\s+[\S+]|[\d+]: ERROR\s+[\S+]</prematch>
+</decoder>
+
+<decoder name="fail2ban_dec_ip">
+   <parent>fail2ban_dec</parent>
+   <regex>Ban (\d+.\d+.\d+.\d+)</regex>
+<!-- <regex>Ban (\d+.\d+.\d+.\d+)|Unban (\d+.\d+.\d+.\d+)</regex> -->
+   <order>srcip</order>
+</decoder>
+
+<!-- ClamAV -->
+<decoder name="clamav_dec">
+   <prematch>FOUND|moved to</prematch>
+   <regex>.+FOUND</regex>
+   <order>found</order>
+</decoder>
+
+<decoder name="clamav_dec_scan">
+   <prematch>UNOFFICIAL|OFFICIAL|FOUND</prematch>
+   <regex>^(\S+): |FOUND</regex>
+   <order>found</order>
+</decoder>
+
+<decoder name="clamav_dec_remote">
+    <prematch>instream|FOUND</prematch>
+    <regex>.+FOUND</regex>
+    <order>remote</order>
+</decoder>
+
+<decoder name="clamav_dec_moved">
+   <parent>clamav_dec</parent>
+   <prematch>moved to</prematch>
+   <regex>.+moved to+.*</regex>
+   <order>moved</order>
+</decoder>
+
+<decoder name="clamav_dec_results">
+   <parent>clamav_dec</parent>
+   <prematch>SCAN SUMMARY</prematch>
+   <regex>Known viruses: \d+|Engine version: \d+.\d+.\d+|Scanned directories: \d+|Scanned files: \d+|Infected files: \d+|Data scanned: \d+.\d+ \S+|Data read: \d+.\d+ \S+ (.*)|Time: \d+.\d+ \S+ (.*)|Start Date: \d+:\d+:\d+ \d+:\d+:\d+|End Date:   \d+:\d+:\d+ \d+:\d+:\d+</regex>
+   <order>known_viruses,engine_version,scanned_directories,scanned_files,infected_files,data_scanned,data_read,time,start_date,end_date</order>
+</decoder>
+
+<!-- MISP -->
+<!-- IPV4 & IPV6 as srcip -->
+<decoder name="json-child-misp">
+    <parent>json</parent>
+    <plugin_decoder>JSON_Decoder</plugin_decoder>
+</decoder>
+
+<decoder name="json-child-misp">
+    <parent>json</parent>
+<!--    <regex>"value": "(\S+)",</regex> -->
+    <regex>"value": "(\d+.\d+.\d+.\d+)</regex>
+    <order>srcip</order>
+</decoder>
+
+<!-- Custom web-log decoder -->
+<decoder name="web-accesslog-spoof">
+    <type>web-log</type>
+    <prematch>\d+.\d+.\d+.\d+,\d+.\d+.\d+.\d+ - -</prematch>
+</decoder>
+
+<decoder name="web-accesslog-spoof-ip">
+    <type>web-log</type>
+    <parent>web-accesslog-spoof</parent>
+    <regex>(\d+.\d+.\d+.\d+),(\d+.\d+.\d+.\d+) - - .+] "(\w+) (\S+) HTTP\S+" (\d+)</regex>
+    <order>srcip2, srcip, protocol, url, id</order>
+</decoder>
+
+<!--
+  Event ID 15: FileCreateStreamHash
+
+  2017 Mar 22 20:58:52 WinEvtLog: Microsoft-Windows-Sysmon/Operational: INFORMATION(15): Microsoft-Windows-Sysmon: SYSTEM: NT AUTHORITY: WIN-M0OTMBFUNGN: File stream created:  UtcTime: 2017-03-22 19:58:52.021  ProcessGuid: {514DFA4C-D745-58D2-0000-00107ECE2501}  ProcessId: 2476  Image: C:\Program Files\Internet Explorer\iexplore.exe  TargetFilename: C:\Users\Alberto\Desktop\setupssh381-20040709.zip  CreationUtcTime: 2017-03-22 19:58:42.380  Hash: MD5=9F82020D0494ED2E38B201C1948DD146
+
+<decoder name="Sysmon-EventID#22">
+    <parent>windows</parent>
+    <type>windows</type>
+    <prematch>Microsoft-Windows-Sysmon/Operational: INFORMATION\(22\)</prematch>
+    <regex>Microsoft-Windows-Sysmon/Operational: \S+\((\d+)\)</regex>
+    <order>id</order>
+</decoder>
+
+<decoder name="Sysmon-EventID#22">
+    <parent>windows</parent>
+    <type>windows</type>
+	<regex offset="after_regex">ProcessId: (\.*)\s+QueryName: (\S+)\s+QueryResults: (\S+);\s+QueryStatus: (\d+)\s+Image: (\.*)\s+User: (\S+)</regex>
+    <order>sysmon.processId, sysmon.queryName, sysmon.queryResults, sysmon.queryStatus, sysmon.image, sysmon.user</order>
+</decoder>
+-->
